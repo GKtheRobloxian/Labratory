@@ -27,9 +27,9 @@ public class PlayerController : MonoBehaviour
         Horizontal = Input.GetAxis("Horizontal");
         Vertical = Input.GetAxis("Vertical");
         transform.Translate(Vector3.forward * speed * Time.deltaTime * Vertical);
-        transform.Translate(Vector3.forward * speed * Time.deltaTime * Horizontal);
+        transform.Translate(Vector3.right * speed * Time.deltaTime * Horizontal);
         transform.RotateAround(transform.position, -Vector3.up, rotate * -5);
-        transform.RotateAround(transform.right, -Vector3.zero, votate * 5);
+        transform.Rotate(-Vector3.right, votate * 5);
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (jump <= 0)
@@ -42,9 +42,10 @@ public class PlayerController : MonoBehaviour
                 jump -= 1;
             }
         }
-        if (rb.velocity.y == 0)
-        {
-            jump = jumpAmount;
-        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        jump = jumpAmount;
     }
 }
