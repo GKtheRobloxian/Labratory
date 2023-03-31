@@ -11,11 +11,13 @@ public class Camera : MonoBehaviour
     public float ytate;
     public float xtate;
     public float ztate;
+    public float crouchSharpness;
+    Vector3 startPos;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        startPos = transform.position;
     }
 
     // Update is called once per frame
@@ -24,17 +26,27 @@ public class Camera : MonoBehaviour
         xtate = transform.localEulerAngles.x;
         ytate = transform.localEulerAngles.y;
         ztate = transform.localEulerAngles.z;
+        CameraRotation();
+        CameraMovement();
+    }
+
+    void CameraRotation()
+    {
+        rotate = Input.GetAxis("Mouse X");
+        votate = Input.GetAxis("Mouse Y");
+        transform.RotateAround(transform.position, -Vector3.up, rotate * -720 * Time.deltaTime);
+        transform.Rotate(-Vector3.right, votate * 720 * Time.deltaTime);
+    }
+
+    void CameraMovement()
+    {
         if (Input.GetKey(KeyCode.LeftControl))
         {
-            transform.position = player.transform.position - new Vector3 (0, 1.0f, 0);
+            transform.position = new Vector3(player.transform.position.x, Mathf.Lerp(transform.position.y, startPos.y / 2.0f, 0.05f), player.transform.position.z);
         }
         else
         {
             transform.position = player.transform.position;
         }
-        rotate = Input.GetAxis("Mouse X");
-        votate = Input.GetAxis("Mouse Y");
-        transform.RotateAround(transform.position, -Vector3.up, rotate * -720 * Time.deltaTime);
-        transform.Rotate(-Vector3.right, votate * 720 * Time.deltaTime);
     }
 }
