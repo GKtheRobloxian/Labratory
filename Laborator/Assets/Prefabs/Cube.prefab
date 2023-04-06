@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 254271059024908574}
   - component: {fileID: 3800667432861635969}
   - component: {fileID: 896919078692999383}
+  - component: {fileID: 546509631554437128}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -113,4 +114,22 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &546509631554437128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4466626559716701762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e67893141502344a9f49adaaa23c8d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 2
+  blood: 30
+  bloodRange: 10
+  lungeRange: 10
+  speed: 20
+  lookAt: {fileID: 2302917414948768168, guid: 7833ea96847f2584092fa55ba999daef, type: 3}

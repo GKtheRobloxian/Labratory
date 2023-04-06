@@ -20,18 +20,26 @@ public class PlayerController : MonoBehaviour
     public float Vertical;
     public float DashForce;
     public float SlideForce;
+    public int startingHealth;
+    public int maximumHealth;
+    int health;
     public Transform cameraControl;
     bool Grounded;
     bool Slide;
     bool wallCling = false;
     Camera cam;
     float slideTimer;
+    public float dashBoost = 0.5f;
     float jumpAmount = 2;
     float jump;
     Rigidbody rb;
+    GameObject canva;
+    UltraInstinct uI;
     // Start is called before the first frame update
     void Start()
     {
+        canva = GameObject.FindGameObjectWithTag("Canvas");
+        uI = canva.GetComponent<UltraInstinct>();
         startPos = transform.position;
         dash = 0f;
         fire = fireRate;
@@ -39,6 +47,7 @@ public class PlayerController : MonoBehaviour
         cam = cameraControl.GetComponent<Camera>();
         rb = GetComponent<Rigidbody>();
         jump = jumpAmount;
+        health = startingHealth;
     }
 
     // Update is called once per frame
@@ -47,6 +56,7 @@ public class PlayerController : MonoBehaviour
         BasicMovement();
         AdvancedMovement();
         Firing();
+        HealthCheck();
     }
 
     void Firing()
@@ -96,6 +106,7 @@ public class PlayerController : MonoBehaviour
     {
         slideTimer -= Time.deltaTime;
         dash -= Time.deltaTime;
+        dashBoost -= Time.deltaTime;
         if (dash < 0)
         {
             if (Input.GetKeyDown(KeyCode.LeftShift) && !Slide)
@@ -103,6 +114,7 @@ public class PlayerController : MonoBehaviour
                 rb.AddRelativeForce(Vector3.forward * DashForce, ForceMode.Impulse);
                 slideTimer = 1.5f;
                 dash = dashRate;
+                dashBoost = 0.5f;
             }
         }
         if (Input.GetKeyDown(KeyCode.LeftControl) && Grounded == true && slideTimer < 0)
@@ -143,5 +155,19 @@ public class PlayerController : MonoBehaviour
         {
             wallCling = true;
         }
+    }
+
+    public void Bloodshed (int Heal)
+    {
+        health += Heal;
+    }
+
+    void HealthCheck ()
+    {
+        if (health > maximumHealth)
+        {
+            health = maximumHealth;
+        }
+        uI.SetValue(health);
     }
 }
