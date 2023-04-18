@@ -6,6 +6,7 @@ public class ProjectileHit : MonoBehaviour
 {
 
     public int damage;
+    public int healOnHit;
     int actualDamage;
     GameObject player;
     PlayerController control;
@@ -32,9 +33,13 @@ public class ProjectileHit : MonoBehaviour
         }
         if (other.gameObject.CompareTag("Enemy"))
         {
-            EnemyController control = other.GetComponent<EnemyController>();
-            control.Damaged(actualDamage);
+            EnemyController controller = other.GetComponent<EnemyController>();
+            controller.Damaged(actualDamage);
             Destroy(gameObject);
+            if(Vector3.Distance(player.transform.position, other.transform.position) <= controller.bloodRange)
+            {
+                control.Bloodshed(healOnHit);
+            }
         }
     }
 

@@ -127,9 +127,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e67893141502344a9f49adaaa23c8d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 2
+  health: 50
   blood: 30
   bloodRange: 10
   lungeRange: 10
+  lungeForce: 20
   speed: 20
   lookAt: {fileID: 2302917414948768168, guid: 7833ea96847f2584092fa55ba999daef, type: 3}

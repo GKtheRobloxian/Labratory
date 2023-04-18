@@ -20,8 +20,11 @@ public class PlayerController : MonoBehaviour
     public float Vertical;
     public float DashForce;
     public float SlideForce;
+    public float maxStamina;
+    public float stamina;
     public int startingHealth;
     public int maximumHealth;
+    public float staminaFillRate;
     int health;
     public Transform cameraControl;
     bool Grounded;
@@ -35,9 +38,14 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
     GameObject canva;
     UltraInstinct uI;
+    GameObject staminar;
+    StaminaBar staminaControl;
     // Start is called before the first frame update
     void Start()
     {
+        staminar = GameObject.Find("Stamina");
+        staminaControl = staminar.GetComponent<StaminaBar>();
+        stamina = maxStamina;
         canva = GameObject.FindGameObjectWithTag("Canvas");
         uI = canva.GetComponent<UltraInstinct>();
         startPos = transform.position;
@@ -57,6 +65,7 @@ public class PlayerController : MonoBehaviour
         AdvancedMovement();
         Firing();
         HealthCheck();
+        StaminaHandling();
     }
 
     void Firing()
@@ -91,7 +100,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                rb.AddForce(Vector3.up * 250f);
+                rb.AddForce(Vector3.up * 200f);
                 jump -= 1;
                 Grounded = false;
             }
@@ -109,12 +118,14 @@ public class PlayerController : MonoBehaviour
         dashBoost -= Time.deltaTime;
         if (dash < 0)
         {
-            if (Input.GetKeyDown(KeyCode.LeftShift) && !Slide)
+            if (Input.GetKeyDown(KeyCode.LeftShift) && !Slide && stamina >= 1)
             {
+                rb.velocity = new Vector3 (0, rb.velocity.y, 0);
                 rb.AddRelativeForce(Vector3.forward * DashForce, ForceMode.Impulse);
                 slideTimer = 1.5f;
                 dash = dashRate;
                 dashBoost = 0.5f;
+                stamina -= 1;
             }
         }
         if (Input.GetKeyDown(KeyCode.LeftControl) && Grounded == true && slideTimer < 0)
@@ -169,5 +180,17 @@ public class PlayerController : MonoBehaviour
             health = maximumHealth;
         }
         uI.SetValue(health);
+    }
+
+    void StaminaHandling()
+    {
+        Debug.Log(stamina);
+        stamina += Time.deltaTime * staminaFillRate;
+        if (stamina > maxStamina)
+        {
+            stamina = maxStamina;
+        }
+        staminaControl.SetValue(stamina);
+        staminaControl.SetText(stamina);
     }
 }
