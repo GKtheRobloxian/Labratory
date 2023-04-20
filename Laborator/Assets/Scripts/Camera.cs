@@ -42,7 +42,7 @@ public class Camera : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftControl))
         {
-            transform.position = new Vector3(player.transform.position.x, Mathf.Lerp(transform.position.y, startPos.y / 2.0f, 0.05f), player.transform.position.z);
+            transform.position = new Vector3(player.transform.position.x, Mathf.Lerp(transform.position.y, player.transform.position.y-(player.transform.localScale.y/4f), 0.05f), player.transform.position.z);
         }
         else
         {

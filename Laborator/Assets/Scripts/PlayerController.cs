@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     public BoxCollider crouchCollide;
     float fireRate = 0.49f;
     float fire;
-    float dashRate = 2.0f;
+    float dashRate = 0.75f;
     float dash;
     Vector3 startPos;
     public float speed;
@@ -135,7 +135,8 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.LeftControl) && Grounded == false)
         {
-            rb.AddRelativeForce(Vector3.down * 30f, ForceMode.Impulse);
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            rb.AddRelativeForce(Vector3.down * 60f, ForceMode.Impulse);
         }
         if (Input.GetKey(KeyCode.LeftControl))
         {

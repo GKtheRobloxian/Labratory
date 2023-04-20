@@ -33,7 +33,7 @@ public class EnemyController : MonoBehaviour
     void Update()
     {
         HealthCheck();
-        Chase();
+        FilthyControls();
     }
 
     public void Damaged(int damage)
@@ -46,6 +46,7 @@ public class EnemyController : MonoBehaviour
         if (health <= 0)
         {
             Destroy(gameObject);
+            Destroy(lookAt);
             if (Vector3.Distance(transform.position, player.transform.position) < bloodRange)
             {
                 PlayerController plau = players.GetComponent<PlayerController>();
@@ -54,11 +55,11 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    void Chase()
+    void FilthyControls()
     {
         chaseTimer -= Time.deltaTime;
-        transform.rotation = Quaternion.Euler(new Vector3 (0, lookAt.transform.rotation.y, 0));
-        Debug.Log(transform.rotation.y);
+        Quaternion rotate = Quaternion.Euler(new Vector3(0, enemy.ytate, 0));
+        transform.rotation = rotate;
         if (Vector3.Distance(transform.position, player.transform.position) > lungeRange)
         {
             transform.Translate(Vector3.forward * speed * Time.deltaTime);

@@ -34,7 +34,7 @@ public class UltraInstinct : MonoBehaviour
     public void SetValue(float value)
     {
         healthBar.fillRect.gameObject.SetActive(true);
-        healthBar.value = value;
+        healthBar.value = Mathf.Lerp(healthBar.value, value, 0.01f);
         healthText.text = "HP: " + value;
     }
 }

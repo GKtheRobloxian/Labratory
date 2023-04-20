@@ -6,28 +6,20 @@ public class EnemyLookAt : MonoBehaviour
 {
 
     Transform player;
-    public Quaternion ytate;
+    public GameObject enemyFollowing;
+    public float ytate;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.Find("Player").transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Look();
-        RotationStorage();
-    }
-
-    void Look()
-    {
+        transform.position = enemyFollowing.transform.position;
         transform.LookAt(player);
-    }
-
-    void RotationStorage()
-    {
-        ytate = transform.rotation;
+        ytate = transform.localEulerAngles.y;
     }
 }
