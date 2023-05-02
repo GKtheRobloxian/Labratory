@@ -14,9 +14,15 @@ public class Camera : MonoBehaviour
     public float crouchSharpness;
     Vector3 startPos;
 
+    float fireRate = 0.49f;
+    float fire;
+    public Quaternion proj;
+    public Rigidbody laser;
+
     // Start is called before the first frame update
     void Start()
     {
+        fire = fireRate;
         startPos = transform.position;
     }
 
@@ -28,6 +34,19 @@ public class Camera : MonoBehaviour
         ztate = transform.localEulerAngles.z;
         CameraRotation();
         CameraMovement();
+        Firing();
+    }
+
+    void Firing()
+    {
+        fire -= Time.deltaTime;
+        if (Input.GetMouseButtonDown(0) && fire < 0)
+        {
+            Rigidbody bullet;
+            bullet = Instantiate(laser, transform.position, transform.rotation) as Rigidbody;
+            bullet.AddRelativeForce(Vector3.forward * 100f, ForceMode.Impulse);
+            fire = fireRate;
+        }
     }
 
     void CameraRotation()

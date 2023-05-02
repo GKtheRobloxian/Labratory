@@ -5,13 +5,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public Quaternion proj;
-    public Rigidbody laser;
     public Transform firePoint;
     public BoxCollider collide;
     public BoxCollider crouchCollide;
-    float fireRate = 0.49f;
-    float fire;
     float dashRate = 0.75f;
     float dash;
     Vector3 startPos;
@@ -40,6 +36,7 @@ public class PlayerController : MonoBehaviour
     UltraInstinct uI;
     GameObject staminar;
     StaminaBar staminaControl;
+    Vector3 MoveDirection;
     // Start is called before the first frame update
     void Start()
     {
@@ -50,7 +47,6 @@ public class PlayerController : MonoBehaviour
         uI = canva.GetComponent<UltraInstinct>();
         startPos = transform.position;
         dash = 0f;
-        fire = fireRate;
         Cursor.lockState = CursorLockMode.Locked;
         cam = cameraControl.GetComponent<Camera>();
         rb = GetComponent<Rigidbody>();
@@ -63,34 +59,29 @@ public class PlayerController : MonoBehaviour
     {
         BasicMovement();
         AdvancedMovement();
-        Firing();
         HealthCheck();
         StaminaHandling();
-    }
-
-    void Firing()
-    {
-        fire -= Time.deltaTime;
-        proj = Quaternion.Euler(new Vector3(cam.xtate, cam.ytate, cam.ztate));
-        if (Input.GetMouseButtonDown(0) && fire < 0)
-        {
-            Rigidbody bullet;
-            bullet = Instantiate(laser, transform.position, cameraControl.rotation) as Rigidbody;
-            bullet.AddRelativeForce(Vector3.forward * 100f, ForceMode.Impulse);
-            fire = fireRate;
-        }
     }
 
     void BasicMovement()
     {
         Quaternion rotate = Quaternion.Euler(new Vector3(0, cam.ytate, 0));
         transform.rotation = rotate;
-        Horizontal = Input.GetAxis("Horizontal");
-        Vertical = Input.GetAxis("Vertical");
+        Horizontal = Input.GetAxisRaw("Horizontal");
+        Vertical = Input.GetAxisRaw("Vertical");
         if (!Slide)
         {
-            transform.Translate(Vector3.forward * speed * Time.deltaTime * Vertical);
-            transform.Translate(Vector3.right * speed * Time.deltaTime * Horizontal);
+            RaycastHit hit;
+            var them = Physics.Raycast(transform.position, new Vector3 (rb.velocity.x, 0, rb.velocity.z), out hit, 20 * Time.deltaTime);
+            if (them)
+            {
+                transform.position = new Vector3(hit.transform.position.x, transform.position.y, hit.transform.position.z);
+            }
+            else if (!them)
+            {
+                transform.Translate(Vector3.forward * 20f * Time.deltaTime * Vertical);
+                transform.Translate(Vector3.right * 20f * Time.deltaTime * Horizontal);
+            }
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -121,7 +112,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.LeftShift) && !Slide && stamina >= 1)
             {
                 rb.velocity = new Vector3 (0, rb.velocity.y, 0);
-                rb.AddRelativeForce(Vector3.forward * DashForce, ForceMode.Impulse);
+                rb.AddRelativeForce(rb.velocity/20 * DashForce, ForceMode.Impulse);
                 slideTimer = 1.5f;
                 dash = dashRate;
                 dashBoost = 0.5f;
