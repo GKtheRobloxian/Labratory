@@ -72,15 +72,11 @@ public class PlayerController : MonoBehaviour
         if (!Slide)
         {
             RaycastHit hit;
-            var them = Physics.Raycast(transform.position, new Vector3 (rb.velocity.x, 0, rb.velocity.z), out hit, 20 * Time.deltaTime);
-            if (them)
+            var them = Physics.Raycast(transform.position, new Vector3 (rb.velocity.x, 0, rb.velocity.z), out hit, 10);
+            if (!them)
             {
-                transform.position = new Vector3(hit.transform.position.x, transform.position.y, hit.transform.position.z);
-            }
-            else if (!them)
-            {
-                transform.Translate(Vector3.forward * 20f * Time.deltaTime * Vertical);
-                transform.Translate(Vector3.right * 20f * Time.deltaTime * Horizontal);
+                transform.Translate(Vector3.forward * speed * Time.deltaTime * Vertical);
+                transform.Translate(Vector3.right * speed * Time.deltaTime * Horizontal);
             }
         }
         if (Input.GetKeyDown(KeyCode.Space))
