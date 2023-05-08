@@ -111,12 +111,23 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.LeftShift) && !Slide && stamina >= 1)
             {
-                rb.velocity = new Vector3 (0, rb.velocity.y, 0);
-                rb.AddRelativeForce(rb.velocity/20 * DashForce, ForceMode.Impulse);
-                slideTimer = 1.5f;
-                dash = dashRate;
-                dashBoost = 0.5f;
-                stamina -= 1;
+                if (Mathf.Abs(rb.velocity.x) > 0 && Mathf.Abs(rb.velocity.z) > 0)
+                {
+                    rb.velocity = new Vector3(0, rb.velocity.y, 0);
+                    rb.AddRelativeForce(Vector3.forward * DashForce, ForceMode.Impulse);
+                    slideTimer = 1.5f;
+                    dash = dashRate;
+                    dashBoost = 0.5f;
+                    stamina -= 1;
+                }
+                else if (rb.velocity.x == 0 && rb.velocity.z == 0)
+                {
+                    rb.AddRelativeForce(Vector3.forward*DashForce, ForceMode.Impulse);
+                    slideTimer = 1.5f;
+                    dash = dashRate;
+                    dashBoost = 0.5f;
+                    stamina -= 1;
+                }
             }
         }
         if (Input.GetKeyDown(KeyCode.LeftControl) && Grounded == true && slideTimer < 0)
